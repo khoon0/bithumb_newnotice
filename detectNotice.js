@@ -188,7 +188,7 @@ const startBithumbDetectPC = async() => {
 const startBithumbDetectMobile = async() => {
     try {
     let isCrawlingStopped = false;  // 크롤링이 중지되었음을 나타내는 변수를 추가합니다.
-    let lastNoticeInfoMobile = await getLastNoticeInfoMobile()
+    let lastNoticeInfoMobile = await getLastNoticeInfoMobile();
     let isMessagePrinted = false; // 메시지 출력 여부를 확인하는 새로운 변수
 
     console.log(`${lastNoticeInfoMobile.title}`, getTime())
