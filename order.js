@@ -12,18 +12,21 @@ const scientificToDecimal = require('scientific-to-decimal');
 
 const TelegramBot = require('node-telegram-bot-api');
 
-// replace the value below with the Telegram token you receive from BotFather
 const token = '6753338952:AAE4S6YojQw9qYpCkKzS5V2ztD1WlvwLtRM';
 
-// Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true});
 
 let isCancelled = false;
+let isSellInProgress = false;
 
 bot.onText(/\/cancel/, (msg, match) => {
   const chatId = msg.chat.id;
-  isCancelled = true;
-  bot.sendMessage(chatId, `Sell operation cancelled.`);
+  if (isSellInProgress) {
+    isCancelled = true;
+    bot.sendMessage(chatId, `Sell operation cancelled.`);
+  } else {
+    bot.sendMessage(chatId, `No sell operation in progress.`);
+  }
 });
 
 let eInfo = {};
@@ -80,6 +83,8 @@ const buy = async ({ keys, symbol, usdt }) => {
 const sell = async ({ keys, symbol, qty, timegap, immediate = false }) => {
   let timerId;
   let countdown = immediate ? 0 : timegap; //time constant
+
+  isSellInProgress = true;
 
   let cancel = new Promise((resolve, reject) => {
     timerId = setInterval(() => {
@@ -142,6 +147,9 @@ const sell = async ({ keys, symbol, qty, timegap, immediate = false }) => {
         throw err;
       }
     }
+  }
+  finally {
+    isSellInProgress = false; 
   }
 };
 
