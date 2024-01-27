@@ -16,6 +16,9 @@ const token = '6911116328:AAEl5IMLzMBwonhs9_T9-7C2Z7hicihibSY';
 
 const bot = new TelegramBot(token, {polling: true});
 
+// polling_error 이벤트 핸들러 추가
+bot.on('polling_error', () => {});
+
 let isCancelled = false;
 let isSellInProgress = false;
 
