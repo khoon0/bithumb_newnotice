@@ -12,7 +12,7 @@ const scientificToDecimal = require('scientific-to-decimal');
 
 const TelegramBot = require('node-telegram-bot-api');
 
-const token = '6753338952:AAE4S6YojQw9qYpCkKzS5V2ztD1WlvwLtRM';
+const token = '6911116328:AAEl5IMLzMBwonhs9_T9-7C2Z7hicihibSY';
 
 const bot = new TelegramBot(token, {polling: true});
 
