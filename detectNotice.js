@@ -91,6 +91,7 @@ const getLastNoticeInfoMobile = async (test = false) => {
 };
 
 const startBithumbDetectPC = async() => {
+    try {
     let isCrawlingStopped = false;  // 크롤링이 중지되었음을 나타내는 변수를 추가합니다.
     let lastNoticeInfoPC = await getLastNoticeInfoPC()
     let isMessagePrinted = false; // 메시지 출력 여부를 확인하는 새로운 변수
@@ -105,6 +106,7 @@ const startBithumbDetectPC = async() => {
 
     const symbols = [];
     setInterval(async () => {
+        try {
         // 현재 시간과 요일을 확인합니다.
         const currentTime = moment(getTime(), 'YYYY.MM.DD hh:mm:ss.SSS A');
         const currentHour = currentTime.hour();
@@ -187,11 +189,17 @@ const startBithumbDetectPC = async() => {
             });
         })
         lastNoticeInfoPC = noticeInfoPC
+        } catch (intervalError) {
+            console.error('Interval function error:', intervalError);
+        }
     }, 200)
+    } catch (error) {
+        console.error('Error in startBithumbDetectPC:', error);}
 }
 
 
 const startBithumbDetectMobile = async() => {
+    try {
     let isCrawlingStopped = false;  // 크롤링이 중지되었음을 나타내는 변수를 추가합니다.
     let lastNoticeInfoMobile = await getLastNoticeInfoMobile()
     let isMessagePrinted = false; // 메시지 출력 여부를 확인하는 새로운 변수
@@ -206,6 +214,7 @@ const startBithumbDetectMobile = async() => {
 
     const symbols = [];
     setInterval(async () => {
+        try {
         // 현재 시간과 요일을 확인합니다.
         const currentTime = moment(getTime(), 'YYYY.MM.DD hh:mm:ss.SSS A');
         const currentHour = currentTime.hour();
@@ -287,7 +296,13 @@ const startBithumbDetectMobile = async() => {
             });
         })
         lastNoticeInfoMobile = noticeInfoMobile
+    } catch (intervalError) {
+        console.error('Interval function error:', intervalError);
+    }
     }, 200)
+    } catch (error) {
+    console.error('Error in startBithumbDetectPC:', error);
+    }
 }
 
 function getTime() {
