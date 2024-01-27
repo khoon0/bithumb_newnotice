@@ -131,6 +131,7 @@ const sell = async ({ keys, symbol, qty, timegap, immediate = false }) => {
   } catch (err) {
     clearInterval(timerId);
     if (err.message === 'Sell operation cancelled.') {
+      isCancelled = false; // Reset isCancelled
       return { response: null, quantity: qty };
     } else {
       console.error(`Error occurred while selling: ${err.message}`);
