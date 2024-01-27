@@ -127,19 +127,6 @@ const startBithumbDetectPC = async() => {
             return;
         }
 
-/*        if ((currentMinute === 15 || currentMinute === 45) && !isMessagePrinted) {
-            console.log(`Crawling is running at ${getTime()}`);
-            axios.post(DISCORD_WEBHOOK_URL_PC, {
-                content: `Crawling is running at ${getTime()}`
-            })
-            .catch(err => {
-                console.error('Error sending PC running time', err);
-            });
-            isMessagePrinted = true;
-        } else if (currentMinute !== 15 && currentMinute !== 45) {
-            isMessagePrinted = false;
-        } */
-
         // 크롤링을 다시 시작합니다.
         if (currentHour === 9 && isCrawlingStopped) {  // 크롤링이 중지된 상태에서 다시 시작될 때만 메시지를 출력합니다.
             console.log(`Operation started again at ${getTime()}`);
@@ -234,19 +221,6 @@ const startBithumbDetectMobile = async() => {
             }
             return;
         }
-
-/*        if ((currentMinute === 15 || currentMinute === 45) && !isMessagePrinted) {
-            console.log(`Crawling is running at ${getTime()}`);
-            axios.post(DISCORD_WEBHOOK_URL_MOBILE, {
-                content: `Crawling is running at ${getTime()}`
-            })
-            .catch(err => {
-                console.error('Error sending Operation time', err);
-            });
-            isMessagePrinted = true;
-        } else if (currentMinute !== 15 && currentMinute !== 45) {
-            isMessagePrinted = false;
-        } */
 
         // 크롤링을 다시 시작합니다.
         if (currentHour === 9 && isCrawlingStopped) {  // 크롤링이 중지된 상태에서 다시 시작될 때만 메시지를 출력합니다.
