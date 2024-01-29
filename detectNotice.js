@@ -34,7 +34,7 @@ const getLastNoticeInfoPC = async (test = false) => {
                 const title = $('td.one-line a', el).text().trim();
                 // 현재 시간 (UTC)에 9시간 더하기
                 return {
-                    title: test ? '[마켓 추가] 리플(XRP) 원화 마켓 추가 pc' : title,
+                    title: test ? '[이벤트] 리플(XRP) 원화 마켓 추가 기념 에어드랍 이벤트 pc' : title,
                     id: test ? 100 : id,
                 }
             }
@@ -74,7 +74,7 @@ const getLastNoticeInfoMobile = async (test = false) => {
                 const title = $('p', el).text().trim();
                 // 현재 시간 (UTC)에 9시간 더하기
                 return {
-                    title: test ? '[투자 유의] 리플(XRP) 원화 마켓 추가 mobile' : title,
+                    title: test ? '[이벤트] 리플(XRP) 신규 로드맵 발표 기념 에어드랍 이벤트 mobile' : title,
                     id: test ? 100 : id,
                 }
             }
@@ -157,9 +157,13 @@ const startBithumbDetectPC = async() => {
             console.error('Error sending new notice title', err);
           });
 
-        if (!/\[마켓 추가\]/.test(newNoticeTitle)) {
-            lastNoticeInfoPC = noticeInfoPC
-            isRunning = false;
+        lastNoticeInfoPC = noticeInfoPC  
+
+        if (!(/\[마켓 추가\]/.test(newNoticeTitle)) && !(/에어드랍 이벤트/.test(newNoticeTitle))) {
+            return;
+        }
+
+        if (/원화 마켓 추가 기념/.test(newNoticeTitle)) {
             return;
         }
 
@@ -175,11 +179,10 @@ const startBithumbDetectPC = async() => {
                 c: null,
             });
         })
-        lastNoticeInfoPC = noticeInfoPC
         } catch (intervalError) {
             console.error('Interval function error:', intervalError);
         }
-    }, 200)
+    }, 150)
     } catch (error) {
         console.error('Error in startBithumbDetectPC:', error);}
 }
@@ -252,8 +255,13 @@ const startBithumbDetectMobile = async() => {
             console.error('Error sending Operation beginning', err);
           });
 
-        if (!/\[마켓 추가\]/.test(newNoticeTitle)) {
-            lastNoticeInfoMobile = noticeInfoMobile
+        lastNoticeInfoMobile = noticeInfoMobile
+
+        if (!(/\[마켓 추가\]/.test(newNoticeTitle)) && !(/에어드랍 이벤트/.test(newNoticeTitle))) {
+            return;
+        }
+
+        if (/원화 마켓 추가 기념/.test(newNoticeTitle)) {
             return;
         }
 
@@ -269,11 +277,10 @@ const startBithumbDetectMobile = async() => {
                 c: null,
             });
         })
-        lastNoticeInfoMobile = noticeInfoMobile
     } catch (intervalError) {
         console.error('Interval function error:', intervalError);
     }
-    }, 200)
+    }, 150)
     } catch (error) {
     console.error('Error in startBithumbDetectPC:', error);
     }
