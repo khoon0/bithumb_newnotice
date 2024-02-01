@@ -23,6 +23,7 @@ const getLastNoticeInfoPC = async (test = false) => {
         });
         const $ = cheerio.load(res.data);
         const notices = $('tr');
+        const baseURL = 'https://cafe.bithumb.com/view/board-contents/'; // Base URL 추가
 
         for (let i = 1; i < notices.length; i++) {
             const el = notices[i];
@@ -32,10 +33,11 @@ const getLastNoticeInfoPC = async (test = false) => {
                 const script = $(el).attr('onclick');
                 const id = script.replace("toDetailOrUrl(event, '", "").replace("','')", "")
                 const title = $('td.one-line a', el).text().trim();
+                const link = baseURL + id; // 링크 생성
                 // 현재 시간 (UTC)에 9시간 더하기
                 return {
-                    title: test ? '[이벤트] 리플(XRP) 원화 마켓 추가 기념 에어드랍 이벤트 pc' : title,
-                    id: test ? 100 : id,
+                    title: test ? `[[이벤트] 리플(XRP) 기념 에어드랍 이벤트 pc](${link})` : `[${title}](${link})`, // 제목에 하이퍼링크 추가
+                    id: test ? 1000000 : id,
                 }
             }
         }
@@ -50,6 +52,7 @@ const getLastNoticeInfoPC = async (test = false) => {
     }
 };
 
+
 const getLastNoticeInfoMobile = async (test = false) => {
     try {
         const res = await axios.get('https://m-feed.bithumb.com/notice', {
@@ -63,6 +66,7 @@ const getLastNoticeInfoMobile = async (test = false) => {
         });
         const $ = cheerio.load(res.data);
         const notices = $('.noticeList_notice-item-list__link__rVBKl');
+        const baseURL = 'https://m-feed.bithumb.com/notice/'; // Base URL 추가
 
         for (let i = 1; i < notices.length; i++) {
             const el = notices[i];
@@ -72,10 +76,11 @@ const getLastNoticeInfoMobile = async (test = false) => {
                 const script = $(el).attr('href');
                 const id = script.replace("/notice/", "")
                 const title = $('p', el).text().trim();
+                const link = baseURL + id; // 링크 생성
                 // 현재 시간 (UTC)에 9시간 더하기
                 return {
-                    title: test ? '[이벤트] 리플(XRP) 신규 로드맵 발표 기념 에어드랍 이벤트 mobile' : title,
-                    id: test ? 100 : id,
+                    title: test ? `[[이벤트] 트론(TRX) 기념 에어드랍 이벤트 pc](${link})` : `[${title}](${link})`, // 제목에 하이퍼링크 추가
+                    id: test ? 1000000 : id,
                 }
             }
         }
@@ -89,6 +94,8 @@ const getLastNoticeInfoMobile = async (test = false) => {
           });
     }
 };
+
+
 
 const startBithumbDetectPC = async() => {
     try {
@@ -170,15 +177,16 @@ const startBithumbDetectPC = async() => {
         const new_listing_symbol = newNoticeTitle.match(/\(([^)]+)\)/g);
         new_listing_symbol.forEach((e) => {
             const symbol = e.replace('(', '').replace(')', '');
-            if (symbols.includes(symbol)) {
+            if (symbols.includes(symbol) || symbol.includes('https')) {
                 return
             }
             symbols.push(symbol)
             detectE.emit('NEWLISTING', {
-                s: e.replace('(', '').replace(')', '') + 'USDT',
+                s: symbol + 'USDT',
                 c: null,
             });
         })
+        
         } catch (intervalError) {
             console.error('Interval function error:', intervalError);
         }
@@ -268,12 +276,12 @@ const startBithumbDetectMobile = async() => {
         const new_listing_symbol = newNoticeTitle.match(/\(([^)]+)\)/g);
         new_listing_symbol.forEach((e) => {
             const symbol = e.replace('(', '').replace(')', '');
-            if (symbols.includes(symbol)) {
+            if (symbols.includes(symbol) || symbol.includes('https')) {
                 return
             }
             symbols.push(symbol)
             detectE.emit('NEWLISTING', {
-                s: e.replace('(', '').replace(')', '') + 'USDT',
+                s: symbol + 'USDT',
                 c: null,
             });
         })
